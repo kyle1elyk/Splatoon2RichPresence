@@ -99,10 +99,17 @@ api = requests.get("https://splatoon2.ink/data/schedules.json").json()
 salmonAPI = requests.get("https://splatoon2.ink/data/coop-schedules.json").json()
 splatfestAPI = requests.get("https://splatoon2.ink/data/festivals.json").json()
 
+sfStart = splatfestAPI["na"]["festivals"][0]["times"]["start"]
+sfEnd = splatfestAPI["na"]["festivals"][0]["times"]["end"]
+
+
 turfFrame = Frame(top, bg="#2C2F33")
 turfFrame.pack(side="left", fill="both", expand=False)
 
-TW = Label(turfFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = "Turf War: ")
+if sfStart <= time.time() <= sfEnd:
+   TW = Label(turfFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = "Splatfest: ")
+else:
+   TW = Label(turfFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = "Turf War: ")
 TW.grid(row=0, column=0)
 
 A = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['regular'][0]['stage_a']['name'], command=lambda:map(api['regular'][0]['stage_a']['name'],"tw","Turf War"))
@@ -112,43 +119,41 @@ B = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = ap
 B.grid(row=0, column=2)
 
 # vvv --- Adds shifty support
-sfStart = splatfestAPI["na"]["festivals"][0]["times"]["start"]
-sfEnd = splatfestAPI["na"]["festivals"][0]["times"]["end"]
 if sfStart <= time.time() <= sfEnd:
-    C = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = splatfestAPI["na"]["festivals"][0]["special_stage"]["name"], command=lambda:map(splatfestAPI["na"]["festivals"][0]["special_stage"]["name"],"tw","Turf War"))
-    C.grid(row=0, column=3)
+    sfC = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = splatfestAPI["na"]["festivals"][0]["special_stage"]["name"], command=lambda:map(splatfestAPI["na"]["festivals"][0]["special_stage"]["name"],"tw","Turf War"))
+    sfC.grid(row=0, column=3)
 # ^^^
 turfFrame.place(x=15,y=70)
 
+if not (sfStart <= time.time() <= sfEnd):
+    rankFrame = Frame(top, bg="#2C2F33")
+    rankFrame.pack(side="left", fill="both", expand=False)
 
-rankFrame = Frame(top, bg="#2C2F33")
-rankFrame.pack(side="left", fill="both", expand=False)
+    RA = Label(rankFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = api['gachi'][0]['rule']['name'] + " (Ranked): ")
+    RA.grid(row=0, column=0)
 
-RA = Label(rankFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = api['gachi'][0]['rule']['name'] + " (Ranked): ")
-RA.grid(row=0, column=0)
+    C = Button(rankFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['gachi'][0]['stage_a']['name'], command=lambda:map(api['gachi'][0]['stage_a']['name'],"r",api['gachi'][0]['rule']['name']))
+    C.grid(row=0, column=1)
 
-C = Button(rankFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['gachi'][0]['stage_a']['name'], command=lambda:map(api['gachi'][0]['stage_a']['name'],"r",api['gachi'][0]['rule']['name']))
-C.grid(row=0, column=1)
+    D = Button(rankFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['gachi'][0]['stage_b']['name'], command=lambda:map(api['gachi'][0]['stage_b']['name'],"r",api['gachi'][0]['rule']['name']))
+    D.grid(row=0, column=2)
 
-D = Button(rankFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['gachi'][0]['stage_b']['name'], command=lambda:map(api['gachi'][0]['stage_b']['name'],"r",api['gachi'][0]['rule']['name']))
-D.grid(row=0, column=2)
-
-rankFrame.place(x=15,y=120)
+    rankFrame.place(x=15,y=120)
 
 
-legFrame = Frame(top, bg="#2C2F33")
-legFrame.pack(side="left", fill="both", expand=False)
+    legFrame = Frame(top, bg="#2C2F33")
+    legFrame.pack(side="left", fill="both", expand=False)
 
-LG = Label(legFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = api['league'][0]['rule']['name'] + " (League): ")
-LG.grid(row=0, column=0)
+    LG = Label(legFrame, font="Splatoon1", bg="#2C2F33", fg="#ffffff", text = api['league'][0]['rule']['name'] + " (League): ")
+    LG.grid(row=0, column=0)
 
-E = Button(legFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['league'][0]['stage_a']['name'], command=lambda:map(api['league'][0]['stage_a']['name'],"l",api['league'][0]['rule']['name']))
-E.grid(row=0, column=1)
+    E = Button(legFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['league'][0]['stage_a']['name'], command=lambda:map(api['league'][0]['stage_a']['name'],"l",api['league'][0]['rule']['name']))
+    E.grid(row=0, column=1)
 
-F = Button(legFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['league'][0]['stage_b']['name'], command=lambda:map(api['league'][0]['stage_b']['name'],"l",api['league'][0]['rule']['name']))
-F.grid(row=0, column=2)
+    F = Button(legFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['league'][0]['stage_b']['name'], command=lambda:map(api['league'][0]['stage_b']['name'],"l",api['league'][0]['rule']['name']))
+    F.grid(row=0, column=2)
 
-legFrame.place(x=15,y=170)
+    legFrame.place(x=15,y=170)
 
 
 salmonFrame = Frame(top, bg="#2C2F33")
