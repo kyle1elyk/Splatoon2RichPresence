@@ -97,6 +97,7 @@ autoRun = Button(top, text = "test", command=loop("",time.time()))
 
 api = requests.get("https://splatoon2.ink/data/schedules.json").json()
 salmonAPI = requests.get("https://splatoon2.ink/data/coop-schedules.json").json()
+splatfestAPI = requests.get("https://splatoon2.ink/data/festivals.json").json()
 
 turfFrame = Frame(top, bg="#2C2F33")
 turfFrame.pack(side="left", fill="both", expand=False)
@@ -110,6 +111,13 @@ A.grid(row=0, column=1)
 B = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = api['regular'][0]['stage_b']['name'], command=lambda:map(api['regular'][0]['stage_b']['name'],"tw","Turf War"))
 B.grid(row=0, column=2)
 
+# vvv --- Adds shifty support
+sfStart = splatfestAPI["na"]["festivals"][0]["times"]["start"]
+sfEnd = splatfestAPI["na"]["festivals"][0]["times"]["end"]
+if sfStart <= time.time() <= sfEnd:
+    C = Button(turfFrame, font="Splatoon2", highlightbackground="#2C2F33", text = splatfestAPI["na"]["festivals"][0]["special_stage"]["name"], command=lambda:map(splatfestAPI["na"]["festivals"][0]["special_stage"]["name"],"tw","Turf War"))
+    C.grid(row=0, column=3)
+# ^^^
 turfFrame.place(x=15,y=70)
 
 
